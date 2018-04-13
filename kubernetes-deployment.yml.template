@@ -1,0 +1,39 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nodecities
+  labels:
+    run: nodecities
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        run: nodecities
+    spec:
+      containers:
+      - name: nodecities
+        image: $DOCKER_USERNAME/nodecities:$WERCKER_GIT_BRANCH-$WERCKER_GIT_COMMIT
+        imagePullPolicy: Always
+        ports:
+        - name: nodecities
+          containerPort: 8080
+          protocol: TCP
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodecities-svc
+spec:
+  selector:
+    run: nodecities
+  ports:
+    - port: 8085
+      targetPort: 8080
+  type: ClusterIP
