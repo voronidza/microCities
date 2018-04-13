@@ -1,15 +1,12 @@
+# Use node.js base docker image from DockerHub
 box: node
 
+# Build the nodeJS application
 build:
   steps:
     - npm-install
 
-# Test application using Mocha
-test:
-  steps:
-    - npm-test
-
-# Push to Docker Hub
+# Push new release to DockerHub
 push:
   steps:
     - internal/docker-push:
@@ -22,17 +19,15 @@ push:
       cmd: node app.js
       registry: https://hub.docker.com
       
+# Deploy containerized application to kubernetes cluster
 deploy-to-k8s:
   box:
         id: alpine
         cmd: /bin/sh
+
   steps:
     - bash-template
     
-    - script:
-        name: "Visualise Kubernetes config"
-        code: cat kubernetes-namespace.yml
-
     - kubectl:
         name: create namespace    
         server: $KUBERNETES_MASTER
@@ -43,24 +38,13 @@ deploy-to-k8s:
     - script:
         name: wait to create namespace
         code: sleep 10
- 
-#    - kubectl:
-#        name: create OCR secret
-#        server: $KUBERNETES_MASTER
-#        token: $KUBERNETES_TOKEN
-#        insecure-skip-tls-verify: true
-#        command: create secret docker-registry wrelease --docker-server=wcr.io --docker-username=$WERCKER_APPLICATION_OWNER_NAME --docker-password=$KUBERNETES_TOKEN --docker-email=${WERCKER_APPLICATION_OWNER_NAME}@mail.com --namespace=$WERCKER_APPLICATION_OWNER_NAME; echo 'secret step'
-    
+  
     - kubectl:
         name: create deplyoment
         server: $KUBERNETES_MASTER
         token: $KUBERNETES_TOKEN
         insecure-skip-tls-verify: true
         command: apply -f $WERCKER_ROOT/kubernetes-deployment.yml --namespace=$WERCKER_APPLICATION_OWNER_NAME
-
-    - script:
-        name: "Visualise Ingress config"
-        code: cat ingress.yml
 
     - kubectl:
         name: create Ingress configuration
