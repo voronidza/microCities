@@ -17,7 +17,7 @@ push-to-registry:
       ports: "8080"
       working-dir: /pipeline/source
       cmd: node app.js
-      registry: https://hub.docker.com
+#      registry: https://hub.docker.com
       
 # Deploy containerized application to kubernetes cluster
 deploy-to-k8s:
