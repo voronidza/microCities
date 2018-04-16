@@ -7,7 +7,7 @@ build:
     - npm-install
 
 # Push new release to DockerHub
-push:
+push-to-registry:
   steps:
     - internal/docker-push:
       username: $DOCKER_USERNAME
