@@ -13,7 +13,7 @@ push-to-registry:
       username: $DOCKER_USERNAME
       password: $DOCKER_PASSWORD
       tag: $WERCKER_GIT_BRANCH-$WERCKER_GIT_COMMIT
-      repository: $DOCKER_USERNAME/nodecities
+      repository: $DOCKER_USERNAME/microcities
       ports: "8080"
       working-dir: /pipeline/source
       cmd: node app.js
