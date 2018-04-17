@@ -1,9 +1,9 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: nodecities
+  name: microcities
   labels:
-    run: nodecities
+    run: microcities
 spec:
   replicas: 1
   strategy:
@@ -14,14 +14,14 @@ spec:
   template:
     metadata:
       labels:
-        run: nodecities
+        run: microcities
     spec:
       containers:
-      - name: nodecities
-        image: $DOCKER_USERNAME/nodecities:$WERCKER_GIT_BRANCH-$WERCKER_GIT_COMMIT
+      - name: microcities
+        image: $DOCKER_USERNAME/microcities:$WERCKER_GIT_BRANCH-$WERCKER_GIT_COMMIT
         imagePullPolicy: Always
         ports:
-        - name: nodecities
+        - name: microcities
           containerPort: 8080
           protocol: TCP
       restartPolicy: Always
@@ -29,10 +29,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: nodecities-svc
+  name: microcities-svc
 spec:
   selector:
-    run: nodecities
+    run: microcities
   ports:
     - port: 8085
       targetPort: 8080
