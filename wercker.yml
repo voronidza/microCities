@@ -1,4 +1,4 @@
-# Use node.js base docker image from DockerHub
+# Use node.js base docker image from DockerHub.
 box: node
 
 # Build the nodeJS application
